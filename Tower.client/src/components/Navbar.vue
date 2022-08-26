@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
       <div class="d-flex flex-column align-items-center">
-        <img alt="logo" src="../assets/img/cw-logo.png" height="45" />
+        <h1>The Tower</h1>
       </div>
     </router-link>
     <button
@@ -18,15 +18,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto">
-        <li>
-          <router-link
-            :to="{ name: 'About' }"
-            class="btn text-success lighten-30 selectable text-uppercase"
-          >
-            About
-          </router-link>
-        </li>
+
       </ul>
+        <button type="button" class="btn btn-primary btn-lg m-2" data-bs-toggle="modal" data-bs-target="#create-event">
+        Create Event
+      </button>
+      <Modal id="create-event">
+        <EventForm />
+      </Modal>
       <!-- LOGIN COMPONENT HERE -->
       <Login />
     </div>
@@ -34,10 +33,13 @@
 </template>
 
 <script>
+import Modal from './Modal.vue';
+import EventForm from './EventForm.vue';
 export default {
-  setup() {
-    return {};
-  },
+    setup() {
+        return {};
+    },
+    components: { Modal, EventForm }
 };
 </script>
 
