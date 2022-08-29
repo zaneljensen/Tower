@@ -1,12 +1,8 @@
 <template>
-   <!-- <div class="modal fade" id="create-event" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
+    <div class="row flex-column">
 
-        <div class="modal-body"> -->
-          <form @submit.prevent="handleSubmit" class="row bg-white text-dark p-4 elevation-2">
-            <div class="col-12">Create Event</div>
+        <form @submit.prevent="createEvent" id="event-form">
+      <div class="col-12">Create Event</div>
             <div class="col-6">
               <label for="" class="form-label">Title</label>
               <input type="text" v-model="editable.name" class="form-control" name="title" id="title">
@@ -46,39 +42,45 @@
                 aria-describedby="helpId" placeholder="">
             </div>
             <button class="col-6 btn btn-success m-4">Submit</button>
-          </form>
-        <!-- </div> -->
-
-      <!-- </div> -->
-    <!-- </div> -->
-  <!-- </div> -->
+        </form>
+    </div>
 </template>
 
+
 <script>
-import { ref } from 'vue';
-import { eventsService } from '../services/EventsService.js'
-import { logger } from '../utils/Logger.js'
-import Pop from '../utils/Pop.js'
+import { ref } from "@vue/reactivity"
+import { eventsService } from "../services/EventsService"
+import Pop from "../utils/Pop"
+import { onMounted, watchEffect } from '@vue/runtime-core'
+import { Modal } from "bootstrap"
+import { useRouter } from "vue-router"
+import { logger } from "../utils/Logger"
 export default {
+    props: { event: { type: Object, required: false } },
     setup() {
-        const editable = ref({})
+        let editable = ref({})
+        const router = useRouter()
         return {
             editable,
-            async handleSubmit() {
+            async createEvent() {
                 try {
-                    logger.log('creating event', editable.value)
-                    await eventsService.createEvent(editable.value)
-                    Pop.toast('Event Created!')
+                    let eventData = editable.value
+                    let newEvent = await eventsService.createEvent(eventData)
+                    logger.log('here is the new event', newEvent)
+                    Pop.toast('Event listed', 'success')
+                    Modal.getOrCreateInstance(document.getElementById('create-event')).hide()
+                    
+                    router.push({name: "EventDetails", params: {id: newEvent.id}})
+                    editable.value = {}
                 } catch (error) {
                     Pop.error(error)
                 }
             }
         }
     }
-
 }
 </script>
 
-<style>
 
+<style lang="scss" scoped>
 </style>

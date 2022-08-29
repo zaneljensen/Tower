@@ -6,7 +6,6 @@ export const CommentSchema = new Schema({
     creatorId: { type: ObjectId, required: true, ref: 'Account' },
     eventId: { type: ObjectId, required: true },
     body: { type: String, required: true },
-    isAttending: { type: Boolean, default: false }
 }, {
     timestamps: true, toJSON: { virtuals: true }
 })
